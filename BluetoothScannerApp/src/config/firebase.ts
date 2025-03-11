@@ -3,13 +3,12 @@ import { getDatabase } from 'firebase/database';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  databaseURL: "YOUR_DATABASE_URL",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAk8Atw1E_dFw5L0l6yzpx1vT9C3eoCEZ8",
+  authDomain: "shareprofile-cca1c.firebaseapp.com",
+  databaseURL: "https://shareprofile-cca1c-default-rtdb.firebaseio.com/",
+  projectId: "shareprofile-cca1c",
+  storageBucket: "shareprofile-cca1c.firebasestorage.app",
+  messagingSenderId: "859996644324",
 };
 
 // Initialize Firebase
