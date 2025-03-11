@@ -120,4 +120,9 @@ dependencies {
     // BLE Manager dependencies
     implementation project(':react-native-ble-manager')
     implementation("com.polidea.rxandroidble2:rxandroidble:1.12.1")
+    
+    // Vector Icons
+    implementation project(':react-native-vector-icons')
 }
+
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
