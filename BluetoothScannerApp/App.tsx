@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Alert} from 'react-native';
 import BleManager from 'react-native-ble-manager';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Import Firebase configuration
 import './src/config/firebase';
@@ -12,7 +13,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import ShareScreen from './src/screens/ShareScreen';
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 function App(): React.JSX.Element {
   useEffect(() => {
@@ -35,9 +36,35 @@ function App(): React.JSX.Element {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{
+      <Tab.Navigator
+        screenOptions={({route}) => ({
+          tabBarIcon: ({focused, color, size}) => {
+            let iconName = 'circle'; // Default icon
+
+            if (route.name === 'Home') {
+              iconName = 'home';
+            } else if (route.name === 'Profile') {
+              iconName = 'user';
+            } else if (route.name === 'Share') {
+              iconName = 'share-alt';
+            }
+
+            return <Icon name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: '#2089dc',
+          tabBarInactiveTintColor: 'gray',
+          tabBarStyle: {
+            height: 60,
+            paddingBottom: 8,
+            paddingTop: 8,
+            backgroundColor: '#fff',
+            borderTopWidth: 1,
+            borderTopColor: '#e0e0e0',
+          },
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontWeight: '500',
+          },
           headerStyle: {
             backgroundColor: '#2089dc',
           },
@@ -45,30 +72,30 @@ function App(): React.JSX.Element {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
-        }}
+        })}
       >
-        <Stack.Screen 
+        <Tab.Screen 
           name="Home" 
           component={HomeScreen}
           options={{
             title: 'Nearby Users',
           }}
         />
-        <Stack.Screen 
+        <Tab.Screen 
           name="Profile" 
           component={ProfileScreen}
           options={{
             title: 'My Profile',
           }}
         />
-        <Stack.Screen 
+        <Tab.Screen 
           name="Share" 
           component={ShareScreen}
           options={{
             title: 'Share Details',
           }}
         />
-      </Stack.Navigator>
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
