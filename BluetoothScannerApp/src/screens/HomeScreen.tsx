@@ -11,6 +11,7 @@ import {
 import BleManager from 'react-native-ble-manager';
 import {Button} from '@rneui/themed';
 import {getDatabase, ref, get} from 'firebase/database';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface ScannedDevice {
   id: string;
@@ -120,17 +121,27 @@ const HomeScreen = ({navigation}: any) => {
 
   return (
     <View style={styles.container}>
-      <Button
-        title={scanning ? 'Scanning...' : 'Scan Nearby Devices'}
-        onPress={startScan}
-        loading={scanning}
-        buttonStyle={styles.scanButton}
-      />
       <FlatList
         data={devices}
         renderItem={renderDevice}
         keyExtractor={(item) => item.id}
         style={styles.list}
+        contentContainerStyle={styles.listContent}
+        ListEmptyComponent={() => (
+          <View style={styles.emptyContainer}>
+            <Icon name="bluetooth-b" size={50} color="#ccc" />
+            <Text style={styles.emptyText}>No devices found</Text>
+            <Text style={styles.emptySubText}>Tap the scan button to search for nearby devices</Text>
+          </View>
+        )}
+      />
+      <Button
+        title={scanning ? '' : ''}
+        onPress={startScan}
+        loading={scanning}
+        icon={<Icon name="bluetooth-b" size={24} color="white" />}
+        buttonStyle={styles.fabButton}
+        containerStyle={styles.fabContainer}
       />
     </View>
   );
@@ -139,25 +150,31 @@ const HomeScreen = ({navigation}: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#fff',
-  },
-  scanButton: {
-    backgroundColor: '#2089dc',
-    marginBottom: 16,
   },
   list: {
     flex: 1,
   },
+  listContent: {
+    padding: 16,
+    paddingBottom: 80, // Space for FAB
+  },
   deviceItem: {
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderRadius: 8,
+    backgroundColor: '#f8f9fa',
+    marginBottom: 12,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   deviceName: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
+    color: '#2089dc',
   },
   deviceRssi: {
     fontSize: 14,
@@ -165,6 +182,44 @@ const styles = StyleSheet.create({
   },
   userDetails: {
     marginVertical: 8,
+    padding: 8,
+    backgroundColor: '#fff',
+    borderRadius: 4,
+  },
+  fabButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#2089dc',
+    padding: 0,
+  },
+  fabContainer: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 40,
+  },
+  emptyText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#666',
+    marginTop: 16,
+  },
+  emptySubText: {
+    fontSize: 14,
+    color: '#999',
+    marginTop: 8,
+    textAlign: 'center',
   },
 });
 
