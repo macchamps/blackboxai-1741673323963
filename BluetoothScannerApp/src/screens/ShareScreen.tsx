@@ -3,6 +3,7 @@ import {View, StyleSheet, Alert, Platform} from 'react-native';
 import {Button, Text} from '@rneui/themed';
 import BleManager from 'react-native-ble-manager';
 import {PermissionsAndroid} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ShareScreen = ({route, navigation}: any) => {
   const [isSharing, setIsSharing] = useState(false);
@@ -41,19 +42,28 @@ const ShareScreen = ({route, navigation}: any) => {
 
   const startSharing = async () => {
     if (!userId) {
-      Alert.alert('Error', 'Please create a profile first');
-      navigation.navigate('Profile');
+      Alert.alert(
+        'Profile Required',
+        'Please create your profile first before sharing.',
+        [
+          {
+            text: 'Create Profile',
+            onPress: () => navigation.navigate('Profile'),
+          },
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+        ],
+      );
       return;
     }
 
     try {
       setIsSharing(true);
-      // Note: This is a simplified implementation. In a real app,
-      // you would need to implement platform-specific peripheral mode
-      // using native modules or a specialized BLE advertising library
       await BleManager.start({showAlert: false});
       console.log('Started sharing userId:', userId);
-      Alert.alert('Sharing', 'Your profile is now visible to nearby devices');
+      Alert.alert('Sharing Active', 'Your profile is now visible to nearby devices');
     } catch (error) {
       console.error('Error starting share:', error);
       Alert.alert('Error', 'Failed to start sharing. Please try again.');
@@ -73,29 +83,57 @@ const ShareScreen = ({route, navigation}: any) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.statusContainer}>
-        <Text style={styles.statusText}>
-          Status: {isSharing ? 'Sharing' : 'Not Sharing'}
+      <View style={styles.statusCard}>
+        <Icon 
+          name={isSharing ? 'bluetooth' : 'bluetooth-b'} 
+          size={40} 
+          color={isSharing ? '#2089dc' : '#ccc'} 
+        />
+        <Text style={[styles.statusText, isSharing && styles.activeText]}>
+          {isSharing ? 'Currently Sharing' : 'Not Sharing'}
         </Text>
-        {userId && (
-          <Text style={styles.idText}>ID: {userId}</Text>
-        )}
+        <Text style={styles.statusSubText}>
+          {isSharing 
+            ? 'Your profile is visible to nearby devices' 
+            : 'Start sharing to make your profile visible'}
+        </Text>
       </View>
-      
+
       <Button
         title={isSharing ? 'Stop Sharing' : 'Start Sharing'}
         onPress={isSharing ? stopSharing : startSharing}
+        icon={
+          <Icon
+            name={isSharing ? 'stop-circle' : 'play-circle'}
+            size={20}
+            color="white"
+            style={styles.buttonIcon}
+          />
+        }
         buttonStyle={[
-          styles.button,
+          styles.actionButton,
           isSharing ? styles.stopButton : styles.startButton,
         ]}
+        titleStyle={styles.buttonTitle}
+        containerStyle={styles.buttonContainer}
+        raised
       />
-      
+
       <Button
         title="Update Profile"
         onPress={() => navigation.navigate('Profile')}
-        buttonStyle={[styles.button, styles.updateButton]}
+        icon={
+          <Icon
+            name="edit"
+            size={20}
+            color="#2089dc"
+            style={styles.buttonIcon}
+          />
+        }
         type="outline"
+        buttonStyle={styles.updateButton}
+        titleStyle={styles.updateButtonTitle}
+        containerStyle={styles.buttonContainer}
       />
     </View>
   );
@@ -105,29 +143,42 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f5f5',
+    alignItems: 'center',
     justifyContent: 'center',
   },
-  statusContainer: {
+  statusCard: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+    width: '100%',
     marginBottom: 32,
-    padding: 16,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 8,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   statusText: {
-    fontSize: 18,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  idText: {
-    fontSize: 14,
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 16,
     color: '#666',
+  },
+  activeText: {
+    color: '#2089dc',
+  },
+  statusSubText: {
+    fontSize: 14,
+    color: '#999',
+    marginTop: 8,
     textAlign: 'center',
   },
-  button: {
-    marginVertical: 8,
-    height: 50,
-    borderRadius: 25,
+  actionButton: {
+    paddingVertical: 12,
+    borderRadius: 8,
+    width: '100%',
   },
   startButton: {
     backgroundColor: '#2089dc',
@@ -137,7 +188,26 @@ const styles = StyleSheet.create({
   },
   updateButton: {
     borderColor: '#2089dc',
-    marginTop: 16,
+    borderWidth: 2,
+    paddingVertical: 12,
+    borderRadius: 8,
+    width: '100%',
+  },
+  buttonContainer: {
+    width: '100%',
+    marginVertical: 8,
+  },
+  buttonTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  updateButtonTitle: {
+    color: '#2089dc',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  buttonIcon: {
+    marginRight: 8,
   },
 });
 
