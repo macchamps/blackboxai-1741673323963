@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "859996644324",
+    "project_id": "shareprofile-cca1c",
+    "storage_bucket": "shareprofile-cca1c.firebasestorage.app",
+    "firebase_url": "https://shareprofile-cca1c-default-rtdb.firebaseio.com/"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:859996644324:android:1234567890abcdef",
+        "android_client_info": {
+          "package_name": "com.bluetoothscannerapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk8Atw1E_dFw5L0l6yzpx1vT9C3eoCEZ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ]
+}
